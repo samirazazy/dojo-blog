@@ -6,6 +6,7 @@ const Home = () => {
   // npx json-server --watch data/db.json --port 8000
   const [Blogs, setBlogs] = useState(null);
   const [Loading, setLoading] = useState(true);
+  const [Error, setError] = useState(null);
 
   const handelDelete = (id) => {
     const newBolgs = Blogs.filter((blog) => blog.id !== id);
@@ -13,26 +14,31 @@ const Home = () => {
   };
 
   useEffect(() => {
-    // fetch('http://localhost:8000/blogs').then((res) =>
-    //   res.json().then((data) => setBlogs(data))
-    // );
-    getData();
-  }, []);
-
-  const getData = async () => {
-    setTimeout(async () => {
-      const res = await fetch('http://localhost:8000/blogs');
-      const data = await res.json();
-      setBlogs(data);
-      setLoading(false);
+    setTimeout(() => {
+      fetch('http://localhost:8000/blogs')
+        .then((res) => {
+          if (!res.ok) {
+            throw new Error('can not load data from server');
+          }
+          return res.json();
+        })
+        .then((data) => {
+          setBlogs(data);
+          setLoading(false);
+          setError(null);
+        })
+        .catch((err) => {
+          setLoading(false);
+          setError(err.message);
+        });
     }, 1000);
-  };
+  }, []);
 
   return (
     <div className='home'>
-      {Loading ? (
-        <p>Loading...</p>
-      ) : (
+      {Error && <p>{Error}</p>}
+      {Loading && <p>Loading...</p>}
+      {Blogs && (
         <BlogList
           Blogs={Blogs}
           title={'Blog List'}
