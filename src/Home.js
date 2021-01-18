@@ -4,17 +4,7 @@ import BlogList from './BlogList';
 const Home = () => {
   // Crete  fack server
   // npx json-server --watch data/db.json --port 8000
-  const [Blogs, setBlogs] = useState([
-    { title: 'My new website', body: 'lorem ipsum...', author: 'mario', id: 1 },
-    { title: 'Welcome party!', body: 'lorem ipsum...', author: 'yoshi', id: 2 },
-    {
-      title: 'Web dev top tips',
-      body: 'lorem ipsum...',
-      author: 'mario',
-      id: 3,
-    },
-  ]);
-  const [name, setName] = useState('azazy');
+  const [Blogs, setBlogs] = useState(null);
 
   const handelDelete = (id) => {
     const newBolgs = Blogs.filter((blog) => blog.id !== id);
@@ -22,19 +12,32 @@ const Home = () => {
   };
 
   useEffect(() => {
-    console.log('Use Effect');
-  }, [name]);
+    // fetch('http://localhost:8000/blogs').then((res) =>
+    //   res.json().then((data) => setBlogs(data))
+    // );
+    getData();
+  }, []);
+
+  const getData = async () => {
+    const res = await fetch('http://localhost:8000/blogs');
+    const data = await res.json();
+    setBlogs(data);
+  };
 
   return (
     <div className='home'>
-      <BlogList Blogs={Blogs} title={'Blog List'} handelDelete={handelDelete} />
+      {Blogs && (
+        <BlogList
+          Blogs={Blogs}
+          title={'Blog List'}
+          handelDelete={handelDelete}
+        />
+      )}
       {/* <BlogList
         Blogs={Blogs.filter((blog) => blog.author === 'mario')}
         title={"Mario's blog"}
         handelDelete={handelDelete}
       /> */}
-      <button onClick={() => setName('samir')}>change name</button>
-      <b>{name}</b>
     </div>
   );
 };
