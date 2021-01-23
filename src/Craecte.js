@@ -5,9 +5,14 @@ const Craecte = () => {
   const [body, setBody] = useState('');
   const [auther, setAuther] = useState('azazy');
 
+  const handelSubmit = (e) => {
+    e.preventDefault();
+    const blog = { title, body, auther };
+    console.log(blog);
+  };
   return (
     <div className='create'>
-      <form>
+      <form onSubmit={handelSubmit}>
         <label>Blog Name:</label>
         <input
           type='text'
@@ -27,12 +32,11 @@ const Craecte = () => {
         <label>Blog Auther:</label>
         <select value={auther} onChange={(e) => setAuther(e.target.value)}>
           <option value='samir'>samir</option>
-          <option value='samir'>azazy</option>
+          <option value='azazy'>azazy</option>
         </select>
+
+        <button type='submit'>Add blog</button>
       </form>
-      <div>{title}</div>
-      <div>{body}</div>
-      <div> {auther}</div>
     </div>
   );
 };
