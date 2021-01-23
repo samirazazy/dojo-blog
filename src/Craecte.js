@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 const Craecte = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [auther, setAuther] = useState('azazy');
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   const handelSubmit = (e) => {
     e.preventDefault();
@@ -16,6 +18,7 @@ const Craecte = () => {
       body: JSON.stringify(blog),
     }).then(() => {
       setLoading(false);
+      history.push('/');
     });
   };
   return (
