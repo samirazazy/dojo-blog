@@ -4,11 +4,19 @@ const Craecte = () => {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [auther, setAuther] = useState('azazy');
+  const [loading, setLoading] = useState(false);
 
   const handelSubmit = (e) => {
     e.preventDefault();
     const blog = { title, body, auther };
-    console.log(blog);
+    setLoading(true);
+    fetch('http://localhost:8000/blogs', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(blog),
+    }).then(() => {
+      setLoading(false);
+    });
   };
   return (
     <div className='create'>
@@ -34,8 +42,13 @@ const Craecte = () => {
           <option value='samir'>samir</option>
           <option value='azazy'>azazy</option>
         </select>
-
-        <button type='submit'>Add blog</button>
+        {loading ? (
+          <button type='submit' disabled>
+            Add blog...
+          </button>
+        ) : (
+          <button type='submit'>Add blog</button>
+        )}
       </form>
     </div>
   );
